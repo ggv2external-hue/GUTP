@@ -1,0 +1,1042 @@
+/* ==========================================================================
+   PREMIUM BIRTHDAY WEBSITE — NGUYỄN LINH CHI
+   Aesthetic: Ultra-Luxury Editorial Stationery, Ambient Cinematic Atelier
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. DESIGN TOKENS & SYSTEM VARIABLES
+   -------------------------------------------------------------------------- */
+:root {
+  /* Curated Color Palette */
+  --color-bg: #FAF5F0;             /* Warm Ivory */
+  --color-blush: #EAD4D8;          /* Soft Blush */
+  --color-rose: #BD8997;           /* Dusty Rose */
+  --color-wine: #452D3B;           /* Deep Wine */
+  --color-champagne: #D4B887;      /* Champagne Gold */
+
+  /* Alpha Tints & Surfaces */
+  --color-wine-primary: #452D3B;
+  --color-wine-secondary: rgba(69, 45, 59, 0.84);
+  --color-wine-muted: rgba(69, 45, 59, 0.62);
+  --color-wine-faint: rgba(69, 45, 59, 0.32);
+  --color-wine-hairline: rgba(69, 45, 59, 0.12);
+
+  --color-rose-subtle: rgba(189, 137, 151, 0.38);
+  --color-rose-glow: rgba(234, 212, 216, 0.60);
+  --color-champagne-light: rgba(212, 184, 135, 0.40);
+  --color-champagne-glow: rgba(212, 184, 135, 0.25);
+  --color-champagne-solid: #C8A870;
+
+  --card-surface: rgba(255, 253, 250, 0.90);
+  --card-surface-border: rgba(189, 137, 151, 0.26);
+  --card-shadow: 0 32px 80px -16px rgba(69, 45, 59, 0.09),
+                 0 12px 32px -8px rgba(69, 45, 59, 0.05),
+                 0 0 0 1px rgba(255, 255, 255, 0.8) inset;
+
+  /* Typography System */
+  --font-editorial: 'Cormorant Garamond', Georgia, serif;
+  --font-display: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Transitions & Curves */
+  --ease-editorial: cubic-bezier(0.19, 1, 0.22, 1);
+  --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-state: 900ms;
+  --duration-hover: 380ms;
+
+  /* Spacing Scale */
+  --frame-inset: clamp(14px, 2.6vw, 36px);
+  --content-padding: clamp(1.25rem, 4vw, 3.25rem);
+}
+
+/* --------------------------------------------------------------------------
+   2. RESET & BASE STYLING
+   -------------------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  background-color: var(--color-bg);
+  color: var(--color-wine-primary);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+  height: 100%;
+}
+
+body {
+  min-height: 100%;
+  font-family: var(--font-sans);
+  background: var(--color-bg);
+  color: var(--color-wine-primary);
+  line-height: 1.6;
+  overflow-x: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Accessible outline for keyboard users */
+:focus-visible {
+  outline: 2px solid var(--color-rose);
+  outline-offset: 4px;
+}
+
+/* Selection aesthetics */
+::selection {
+  background-color: var(--color-blush);
+  color: var(--color-wine);
+}
+
+/* --------------------------------------------------------------------------
+   3. FILM GRAIN & INTERACTIVE AMBIENT LIGHTING
+   -------------------------------------------------------------------------- */
+/* Subtle paper film-grain texture overlay */
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 999;
+  opacity: 0.04;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Interactive Cursor Ambient Glow (smooth desktop mouse tracking) */
+.cursor-glow {
+  position: fixed;
+  width: 480px;
+  height: 480px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(234, 212, 216, 0.42) 0%, rgba(212, 184, 135, 0.16) 40%, transparent 70%);
+  transition: opacity 0.8s ease;
+  will-change: left, top;
+}
+
+.cursor-glow.is-active {
+  opacity: 1;
+}
+
+/* Ambient glow orbs */
+.ambient-glow {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(85px);
+  pointer-events: none;
+  z-index: 1;
+  transition: opacity 1.2s var(--ease-soft), transform 1.5s var(--ease-editorial);
+}
+
+.ambient-glow--primary {
+  width: clamp(340px, 52vw, 700px);
+  height: clamp(340px, 52vw, 700px);
+  top: -12%;
+  right: -10%;
+  background: radial-gradient(circle, var(--color-blush) 0%, rgba(234, 212, 216, 0.3) 50%, transparent 70%);
+  opacity: 0.6;
+  animation: pulseGlowPrimary 16s ease-in-out infinite alternate;
+}
+
+.ambient-glow--secondary {
+  width: clamp(300px, 46vw, 620px);
+  height: clamp(300px, 46vw, 620px);
+  bottom: -12%;
+  left: -8%;
+  background: radial-gradient(circle, var(--color-champagne-light) 0%, rgba(212, 184, 135, 0.2) 50%, transparent 70%);
+  opacity: 0.55;
+  animation: pulseGlowSecondary 18s ease-in-out infinite alternate;
+}
+
+.ambient-glow--center {
+  width: clamp(260px, 35vw, 500px);
+  height: clamp(260px, 35vw, 500px);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(250, 245, 240, 0.8) 0%, rgba(234, 212, 216, 0.15) 60%, transparent 80%);
+  opacity: 0.7;
+}
+
+/* Subtle atmosphere shift on State B */
+body.state-message-active .ambient-glow--primary {
+  opacity: 0.72;
+  transform: translate(-6%, 10%);
+  background: radial-gradient(circle, rgba(234, 212, 216, 0.85) 0%, rgba(189, 137, 151, 0.3) 55%, transparent 75%);
+}
+
+body.state-message-active .ambient-glow--secondary {
+  opacity: 0.68;
+  transform: translate(8%, -8%);
+  background: radial-gradient(circle, rgba(212, 184, 135, 0.5) 0%, rgba(234, 212, 216, 0.25) 55%, transparent 75%);
+}
+
+/* --------------------------------------------------------------------------
+   4. LUXURY WATERMARK MONOGRAM (EDITORIAL BACKGROUND)
+   -------------------------------------------------------------------------- */
+.bg-watermark {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.watermark-text {
+  font-family: var(--font-editorial);
+  font-size: clamp(18rem, 36vw, 42rem);
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1;
+  color: var(--color-wine);
+  opacity: 0.024;
+  letter-spacing: -0.05em;
+  user-select: none;
+  transform: translateY(-2%);
+  transition: opacity 1.2s ease, transform 1.2s var(--ease-editorial);
+}
+
+body.state-message-active .watermark-text {
+  opacity: 0.018;
+  transform: translateY(2%) scale(1.05);
+}
+
+/* --------------------------------------------------------------------------
+   5. FLOATING PARTICLES & TACTILE SPARKLERS
+   -------------------------------------------------------------------------- */
+.particles-field {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  display: block;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--color-champagne) 0%, rgba(234, 212, 216, 0.2) 80%);
+  opacity: 0;
+  animation: particleDrift linear infinite;
+}
+
+.particle--1 { width: 4px; height: 4px; top: 18%; left: 12%; animation-duration: 22s; animation-delay: 0s; }
+.particle--2 { width: 3px; height: 3px; top: 70%; left: 20%; animation-duration: 19s; animation-delay: 3s; }
+.particle--3 { width: 5px; height: 5px; top: 32%; right: 15%; animation-duration: 25s; animation-delay: 1.5s; }
+.particle--4 { width: 3px; height: 3px; top: 78%; right: 24%; animation-duration: 18s; animation-delay: 4.5s; }
+.particle--5 { width: 4px; height: 4px; top: 46%; left: 45%; animation-duration: 27s; animation-delay: 2s; }
+.particle--6 { width: 2.5px; height: 2.5px; top: 14%; right: 38%; animation-duration: 21s; animation-delay: 5s; }
+.particle--7 { width: 3.5px; height: 3.5px; top: 86%; left: 36%; animation-duration: 24s; animation-delay: 6s; }
+.particle--8 { width: 2.5px; height: 2.5px; top: 58%; right: 8%; animation-duration: 20s; animation-delay: 7s; }
+
+@keyframes particleDrift {
+  0% {
+    transform: translateY(18px) translateX(0) scale(0.9);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.55;
+  }
+  50% {
+    transform: translateY(-24px) translateX(14px) scale(1.15);
+    opacity: 0.75;
+  }
+  80% {
+    opacity: 0.45;
+  }
+  100% {
+    transform: translateY(-60px) translateX(-10px) scale(0.9);
+    opacity: 0;
+  }
+}
+
+/* Interactive click sparkle container */
+.sparkles-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 998;
+}
+
+.starlight-sparkle {
+  position: absolute;
+  color: var(--color-champagne-solid);
+  font-size: 0.95rem;
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+  animation: sparkleBloom 0.75s var(--ease-editorial) forwards;
+}
+
+@keyframes sparkleBloom {
+  0% {
+    transform: translate(-50%, -50%) scale(0.2) rotate(0deg);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+    transform: translate(calc(-50% + var(--dx, 0px)), calc(-50% + var(--dy, -15px))) scale(1.2) rotate(45deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--dx, 0px) * 1.6), calc(-50% + var(--dy, -25px) * 1.5)) scale(0.4) rotate(90deg);
+  }
+}
+
+@keyframes pulseGlowPrimary {
+  0% { transform: scale(1) translate(0, 0); }
+  100% { transform: scale(1.08) translate(-3%, 4%); }
+}
+
+@keyframes pulseGlowSecondary {
+  0% { transform: scale(1) translate(0, 0); }
+  100% { transform: scale(1.1) translate(4%, -3%); }
+}
+
+/* --------------------------------------------------------------------------
+   6. EDITORIAL BORDER & CORNER ACCENTS
+   -------------------------------------------------------------------------- */
+.editorial-frame {
+  position: fixed;
+  inset: var(--frame-inset);
+  pointer-events: none;
+  z-index: 10;
+  border: 1px solid var(--color-wine-hairline);
+  transition: border-color var(--duration-hover) ease;
+}
+
+.frame-corner {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border-color: var(--color-rose);
+  border-style: solid;
+}
+
+.frame-corner--tl { top: -1px; left: -1px; border-width: 1px 0 0 1px; }
+.frame-corner--tr { top: -1px; right: -1px; border-width: 1px 1px 0 0; }
+.frame-corner--bl { bottom: -1px; left: -1px; border-width: 0 0 1px 1px; }
+.frame-corner--br { bottom: -1px; right: -1px; border-width: 0 1px 1px 0; }
+
+.frame-label {
+  position: absolute;
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  font-weight: 500;
+  color: var(--color-wine-faint);
+  text-transform: uppercase;
+}
+
+.frame-label--left { left: 22px; bottom: 20px; }
+.frame-label--right { right: 22px; top: 20px; }
+
+@media (max-width: 680px) {
+  .editorial-frame {
+    display: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   7. MAIN VIEWPORT & STAGE ARCHITECTURE
+   -------------------------------------------------------------------------- */
+.experience-stage {
+  flex: 1;
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  perspective: 1200px;
+}
+
+/* Base Panel Styles */
+.view-panel {
+  width: 100%;
+  padding: var(--content-padding);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.view-panel__inner {
+  width: 100%;
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+/* --------------------------------------------------------------------------
+   8. STATE A — THE BIRTHDAY LANDING SCREEN
+   -------------------------------------------------------------------------- */
+.landing-content {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Eyebrow Label */
+.editorial-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: clamp(1rem, 2.5vh, 1.6rem);
+}
+
+.eyebrow-line {
+  display: inline-block;
+  width: clamp(26px, 4.5vw, 48px);
+  height: 1px;
+  background-color: var(--color-rose-subtle);
+}
+
+.eyebrow-text {
+  font-family: var(--font-sans);
+  font-size: clamp(0.7rem, 0.64rem + 0.25vw, 0.8rem);
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--color-wine-muted);
+}
+
+/* Bespoke Monogram Seal Emblem */
+.monogram-seal-wrap {
+  margin-bottom: clamp(0.8rem, 2vh, 1.4rem);
+}
+
+.monogram-seal {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #FAF5F0 0%, #F5ECE3 85%, #EEDFD3 100%);
+  border: 1px solid rgba(189, 137, 151, 0.35);
+  box-shadow: 0 8px 24px -4px rgba(69, 45, 59, 0.08),
+              0 2px 6px rgba(69, 45, 59, 0.04);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--duration-hover) var(--ease-editorial),
+              box-shadow var(--duration-hover) ease;
+}
+
+.monogram-seal:hover {
+  transform: scale(1.06) rotate(3deg);
+  box-shadow: 0 12px 30px -4px rgba(189, 137, 151, 0.22);
+}
+
+.seal-svg {
+  width: 52px;
+  height: 52px;
+}
+
+.seal-ring-outer {
+  fill: none;
+  stroke: var(--color-rose);
+  stroke-width: 1;
+  stroke-dasharray: 2 3;
+  opacity: 0.75;
+}
+
+.seal-ring-inner {
+  fill: none;
+  stroke: var(--color-champagne);
+  stroke-width: 0.8;
+  opacity: 0.6;
+}
+
+.seal-text-center {
+  font-family: var(--font-editorial);
+  font-size: 26px;
+  font-weight: 600;
+  font-style: italic;
+  fill: var(--color-wine);
+  text-anchor: middle;
+  letter-spacing: 0.02em;
+}
+
+/* Hero Typography */
+.landing-header {
+  margin-bottom: clamp(1rem, 2.4vh, 1.7rem);
+}
+
+.greeting-pretitle {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.65rem, 1.3rem + 1.5vw, 2.6rem);
+  color: var(--color-rose);
+  line-height: 1.25;
+  margin-bottom: clamp(0.35rem, 0.9vh, 0.7rem);
+  letter-spacing: 0.03em;
+}
+
+.celebrant-name {
+  font-family: var(--font-editorial);
+  font-weight: 400;
+  font-size: clamp(2.8rem, 2.2rem + 4vw, 5.8rem);
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  color: var(--color-wine-primary);
+  margin: 0;
+  padding: 0 0.1em;
+}
+
+.name-display {
+  display: inline-block;
+  position: relative;
+  background: linear-gradient(125deg, #452D3B 0%, #684158 35%, #D4B887 52%, #684158 68%, #452D3B 100%);
+  background-size: 240% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: textShimmer 9s ease-in-out infinite alternate;
+}
+
+@keyframes textShimmer {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+/* Understated Editorial Ornament Divider */
+.ornament-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  width: 100%;
+  max-width: 250px;
+  margin: clamp(0.9rem, 2vh, 1.4rem) auto;
+}
+
+.divider-rule {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-rose-subtle), transparent);
+}
+
+.divider-diamond {
+  color: var(--color-champagne-solid);
+  font-size: 0.9rem;
+  line-height: 1;
+  transform: translateY(-0.5px);
+  opacity: 0.85;
+}
+
+/* Supporting Text */
+.supporting-text {
+  font-family: var(--font-editorial);
+  font-style: italic;
+  font-size: clamp(1.08rem, 0.96rem + 0.45vw, 1.28rem);
+  font-weight: 400;
+  color: var(--color-wine-secondary);
+  line-height: 1.7;
+  max-width: 500px;
+  margin: 0 auto clamp(2rem, 4vh, 2.85rem);
+}
+
+/* Button CTA with Luxury Pill Treatment */
+.action-wrap {
+  margin-bottom: clamp(1.8rem, 4vh, 3.2rem);
+  position: relative;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  text-decoration: none;
+  padding: clamp(0.92rem, 0.8rem + 0.35vw, 1.12rem) clamp(2.4rem, 1.9rem + 1.4vw, 3.2rem);
+  font-family: var(--font-sans);
+  font-size: clamp(0.86rem, 0.82rem + 0.2vw, 0.96rem);
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  color: var(--color-wine);
+  background-color: var(--card-surface);
+  border: 1px solid var(--card-surface-border);
+  border-radius: 999px;
+  cursor: pointer;
+  overflow: hidden;
+  box-shadow: 0 8px 28px -6px rgba(69, 45, 59, 0.08),
+              0 2px 6px rgba(69, 45, 59, 0.03);
+  transition: transform var(--duration-hover) var(--ease-editorial),
+              box-shadow var(--duration-hover) var(--ease-editorial),
+              border-color var(--duration-hover) ease,
+              background-color var(--duration-hover) ease,
+              color var(--duration-hover) ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px) scale(1.015);
+  border-color: var(--color-rose);
+  background-color: #FFFDFB;
+  color: #351f2c;
+  box-shadow: 0 16px 40px -10px rgba(189, 137, 151, 0.32),
+              0 4px 12px rgba(69, 45, 59, 0.06);
+}
+
+.btn-primary:active {
+  transform: translateY(0) scale(0.99);
+  box-shadow: 0 4px 14px -2px rgba(69, 45, 59, 0.12);
+}
+
+.btn-primary .btn-text {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.heart-icon {
+  display: inline-block;
+  color: var(--color-rose);
+  font-size: 1.05rem;
+  line-height: 1;
+  transition: transform 0.3s ease, color 0.3s ease;
+  animation: heartSubtlePulse 2.8s ease-in-out infinite;
+}
+
+@keyframes heartSubtlePulse {
+  0%, 80%, 100% { transform: scale(1); }
+  85% { transform: scale(1.22); color: #d0748b; }
+  92% { transform: scale(1.08); }
+}
+
+.btn-primary:hover .heart-icon {
+  transform: scale(1.25);
+  color: #c96781;
+}
+
+.btn-primary .btn-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 120%, rgba(212, 184, 135, 0.35) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity var(--duration-hover) ease;
+}
+
+.btn-primary:hover .btn-glow {
+  opacity: 1;
+}
+
+/* Landing Understated Footer */
+.landing-footer {
+  width: 100%;
+}
+
+.bottom-caption {
+  font-family: var(--font-sans);
+  font-size: clamp(0.68rem, 0.64rem + 0.15vw, 0.76rem);
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-wine-faint);
+  margin: 0;
+}
+
+/* --------------------------------------------------------------------------
+   9. STATE B — THE BIRTHDAY MESSAGE VIEW (LUXURY STATIONERY)
+   -------------------------------------------------------------------------- */
+.message-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.letter-card {
+  position: relative;
+  width: 100%;
+  max-width: 650px;
+  background: var(--card-surface);
+  border: 1px solid var(--card-surface-border);
+  box-shadow: var(--card-shadow);
+  border-radius: 6px;
+  padding: clamp(2.2rem, 1.6rem + 2.8vw, 4.2rem) clamp(1.8rem, 1.2rem + 2.2vw, 3.6rem);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  transform-style: preserve-3d;
+  transition: transform 0.25s ease-out, box-shadow 0.25s ease-out;
+  overflow: hidden;
+}
+
+/* Inner Gold Inset Hairline Border */
+.letter-card__inner-border {
+  position: absolute;
+  inset: 12px;
+  border: 1px solid rgba(212, 184, 135, 0.22);
+  border-radius: 4px;
+  pointer-events: none;
+}
+
+/* Dynamic Specular Sheen (Desktop mousemove interaction) */
+.letter-card__sheen {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at var(--sheen-x, 50%) var(--sheen-y, 50%), rgba(255, 255, 255, 0.35) 0%, transparent 60%);
+  pointer-events: none;
+  opacity: 0.65;
+  mix-blend-mode: overlay;
+}
+
+/* Refined top hairline accent on card */
+.letter-card__accent {
+  position: absolute;
+  top: 0;
+  left: 12%;
+  right: 12%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-rose-subtle), var(--color-champagne), var(--color-rose-subtle), transparent);
+}
+
+/* Stationery Crest */
+.letter-crest {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: clamp(1rem, 2vh, 1.5rem);
+}
+
+.crest-line {
+  flex: 0 0 32px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-champagne-light), transparent);
+}
+
+.crest-emblem {
+  font-family: var(--font-editorial);
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  font-weight: 500;
+  color: var(--color-rose);
+  opacity: 0.9;
+}
+
+.letter-header {
+  text-align: left;
+  margin-bottom: clamp(1.2rem, 2.5vh, 1.8rem);
+}
+
+.letter-salutation {
+  font-family: var(--font-editorial);
+  font-style: italic;
+  font-size: clamp(1.3rem, 1.15rem + 0.6vw, 1.65rem);
+  color: var(--color-rose);
+  line-height: 1.4;
+  margin-bottom: 0.35rem;
+}
+
+.letter-headline {
+  font-family: var(--font-editorial);
+  font-size: clamp(1.7rem, 1.38rem + 1.3vw, 2.5rem);
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--color-wine-primary);
+  letter-spacing: -0.01em;
+}
+
+.letter-ornament {
+  display: flex;
+  align-items: center;
+  margin-bottom: clamp(1.25rem, 2.4vh, 1.85rem);
+}
+
+.ornament-gem {
+  color: var(--color-champagne-solid);
+  font-size: 0.95rem;
+  opacity: 0.95;
+}
+
+/* Letter Body Typography */
+.letter-body {
+  text-align: left;
+  margin-bottom: clamp(1.8rem, 3.4vh, 2.6rem);
+}
+
+.letter-paragraph {
+  font-family: var(--font-sans);
+  font-size: clamp(0.98rem, 0.92rem + 0.22vw, 1.1rem);
+  font-weight: 350;
+  line-height: 1.9;
+  color: var(--color-wine-secondary);
+  margin-bottom: 1.4rem;
+  letter-spacing: 0.01em;
+}
+
+.letter-paragraph:last-child {
+  margin-bottom: 0;
+}
+
+/* Letter Closing */
+.letter-closing {
+  text-align: left;
+  border-top: 1px solid var(--color-wine-hairline);
+  padding-top: clamp(1.35rem, 2.4vh, 1.85rem);
+  margin-bottom: clamp(1.6rem, 3vh, 2.3rem);
+}
+
+.closing-title {
+  font-family: var(--font-editorial);
+  font-size: clamp(1.22rem, 1.12rem + 0.5vw, 1.55rem);
+  font-weight: 500;
+  color: var(--color-wine);
+  margin-bottom: 0.25rem;
+  letter-spacing: 0.01em;
+}
+
+.closing-signoff {
+  font-family: var(--font-editorial);
+  font-style: italic;
+  font-size: clamp(1.08rem, 0.98rem + 0.4vw, 1.3rem);
+  color: var(--color-rose);
+}
+
+.closing-heart {
+  color: var(--color-rose);
+  font-style: normal;
+  display: inline-block;
+  margin-left: 2px;
+}
+
+/* Return Button */
+.letter-action {
+  text-align: left;
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  background: none;
+  border: none;
+  padding: 8px 0;
+  font-family: var(--font-sans);
+  font-size: clamp(0.82rem, 0.78rem + 0.15vw, 0.9rem);
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-wine-muted);
+  cursor: pointer;
+  position: relative;
+  transition: color var(--duration-hover) ease;
+}
+
+.return-arrow {
+  display: inline-block;
+  font-size: 1.05rem;
+  line-height: 1;
+  transition: transform var(--duration-hover) var(--ease-editorial);
+}
+
+.return-text {
+  position: relative;
+}
+
+.return-text::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 0%;
+  height: 1px;
+  background-color: var(--color-rose);
+  transition: width var(--duration-hover) var(--ease-editorial);
+}
+
+.btn-secondary:hover {
+  color: var(--color-wine-primary);
+}
+
+.btn-secondary:hover .return-arrow {
+  transform: translateX(-5px);
+  color: var(--color-rose);
+}
+
+.btn-secondary:hover .return-text::after {
+  width: 100%;
+}
+
+/* --------------------------------------------------------------------------
+   10. INTERACTIVE STATES (PROGRESSIVELY ENHANCED VIA JS)
+   -------------------------------------------------------------------------- */
+
+/* NO-JS FALLBACK:
+   If JavaScript is not enabled, both sections flow naturally in clean document
+   order. No content is hidden. The CTA button anchors down to #view-message. */
+html.no-js .view-panel {
+  position: static;
+  min-height: auto;
+  padding: clamp(2rem, 5vw, 4rem) 1.5rem;
+}
+
+html.no-js .view-message {
+  margin-top: 2rem;
+}
+
+/* JS-ENABLED STATE TRANSITIONS */
+html.js-ready body {
+  overflow: hidden;
+  height: 100vh;
+}
+
+html.js-ready .experience-stage {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+}
+
+html.js-ready .view-panel {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  transition: opacity var(--duration-state) var(--ease-editorial),
+              transform var(--duration-state) var(--ease-editorial),
+              visibility var(--duration-state);
+}
+
+/* State A: Landing active */
+html.js-ready .view-landing {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  visibility: visible;
+  pointer-events: auto;
+  z-index: 2;
+}
+
+html.js-ready .view-message {
+  opacity: 0;
+  transform: translateY(36px) scale(0.975);
+  visibility: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* State B: Message active */
+html.js-ready.state-message-open .view-landing {
+  opacity: 0;
+  transform: translateY(-30px) scale(0.975);
+  visibility: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+
+html.js-ready.state-message-open .view-message {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  visibility: visible;
+  pointer-events: auto;
+  z-index: 2;
+}
+
+/* Graceful Initial Entrance Animation for State A */
+html.js-ready .animate-in {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: editorialFadeUp 1.1s var(--ease-editorial) forwards;
+  animation-delay: calc(var(--stagger) * 110ms + 100ms);
+}
+
+@keyframes editorialFadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   11. RESPONSIVE OPTIMIZATIONS
+   -------------------------------------------------------------------------- */
+@media (max-width: 480px) {
+  :root {
+    --frame-inset: 8px;
+    --content-padding: 1.25rem 1rem;
+  }
+
+  .letter-card {
+    padding: 2.2rem 1.35rem 2rem;
+    box-shadow: 0 12px 36px -10px rgba(69, 45, 59, 0.08);
+  }
+
+  .letter-card__inner-border {
+    inset: 8px;
+  }
+
+  .celebrant-name {
+    font-size: clamp(2.4rem, 11vw, 3.2rem);
+  }
+
+  .greeting-pretitle {
+    font-size: 1.5rem;
+  }
+
+  .letter-paragraph {
+    line-height: 1.8;
+  }
+}
+
+@media (min-width: 1440px) {
+  .view-panel__inner {
+    max-width: 860px;
+  }
+
+  .letter-card {
+    max-width: 710px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   12. ACCESSIBILITY: REDUCED MOTION
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .particle,
+  .cursor-glow,
+  .starlight-sparkle {
+    display: none !important;
+  }
+
+  .ambient-glow {
+    animation: none !important;
+  }
+
+  html.js-ready .animate-in {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .name-display {
+    animation: none !important;
+  }
+}
